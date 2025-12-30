@@ -14,8 +14,6 @@ export default function NewYearCountdown() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0, total: 0 });
   const [isCelebrating, setIsCelebrating] = useState(false);
   const [notificationShown, setNotificationShown] = useState(false);
-  const [musicPlaying, setMusicPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const calculateTimeLeft = (): TimeLeft => {
     const now = new Date();
@@ -68,29 +66,7 @@ export default function NewYearCountdown() {
     }
   }, []);
 
-  const toggleMusic = () => {
-    if (!audioRef.current) {
-      // Create a simple beep tone as placeholder for music
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-      
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      
-      oscillator.frequency.value = 440;
-      gainNode.gain.value = 0.1;
-      
-      if (!musicPlaying) {
-        oscillator.start();
-        setMusicPlaying(true);
-        setTimeout(() => {
-          oscillator.stop();
-          setMusicPlaying(false);
-        }, 3000);
-      }
-    }
-  };
+
 
   const TimeUnit = ({ value, label }: { value: number; label: string }) => (
     <div className="flex flex-col items-center justify-center bg-gradient-to-br from-purple-600/30 to-blue-600/30 backdrop-blur-sm rounded-2xl p-4 md:p-8 border border-white/20 shadow-2xl min-w-[80px] md:min-w-[120px]">
@@ -149,14 +125,6 @@ export default function NewYearCountdown() {
             <div className="text-6xl md:text-8xl animate-bounce-slow mb-6">
               🍾
             </div>
-
-            {/* Music toggle button */}
-            <button
-              onClick={toggleMusic}
-              className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 rounded-full text-white font-semibold shadow-lg transform hover:scale-105 transition-all duration-200"
-            >
-              {musicPlaying ? '🔊 Music Playing' : '🎵 Play Celebration Music'}
-            </button>
           </>
         ) : (
           <div className="text-center animate-celebration">
@@ -180,4 +148,7 @@ export default function NewYearCountdown() {
     </div>
   );
 }
+
+
+
 
